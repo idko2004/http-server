@@ -114,15 +114,6 @@ async function loadFile(fullpath)
 		return null;
 	}
 
-
-	//Modificar index.html
-	if(fullpath === STATIC_PATH + "/index.html")
-	{
-		let modified = file.toString();
-		modified = modified.replace('<body>', `<body gameserver="${vars.global.gameServer}">`);
-		file = modified;
-	}
-
 	return file;
 }
 
