@@ -7,6 +7,8 @@ const colors = require('colors');
 const httpPort = process.env.HTTP_PORT || 8910;
 console.log(`${require('ip').address()}:${httpPort}`);
 
+let waitingTime = parseInt(process.env.WAIT) || 0;
+
 const MIME_TYPES =
 {
 	default: "application/octet-stream",
@@ -29,6 +31,8 @@ function startServer()
 	http.createServer(async function(req, res)
 	{
 		console.log(`//http request: ${req.url}`);
+
+		if(waitingTime > 0) await wait(waitingTime);
 
 		const filePath = getFilePath(req.url);
 		if([undefined, null].includes(filePath))
@@ -135,6 +139,17 @@ function getContentType(fullpath)
 	if(contentType === undefined) contentType = MIME_TYPES.default;
 
 	return contentType;
+}
+
+function wait(ms)
+{
+	return new Promise((good, bad) =>
+	{
+		setTimeout(() =>
+		{
+			good();
+		}, ms);
+	});
 }
 
 startServer();
